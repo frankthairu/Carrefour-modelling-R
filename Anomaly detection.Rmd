@@ -1,0 +1,69 @@
+---
+title: "Untitled"
+author: "Francis Thairu"
+date: '2022-04-03'
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## R Markdown
+
+This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+
+When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+
+```{r}
+library(anomalize)
+library(tidyverse)
+library(dplyr)
+library(tibble)
+library(tibble)
+
+```
+
+
+```{r}
+df=read.csv("http://bit.ly/CarreFourSalesDataset")
+head(df)
+```
+```{r}
+#changing date column to appropriate format and changing to tibble
+df$Date <- as.Date(df$Date, format = "%m/%d/%Y")
+df$Date <- as.POSIXct(df$Date)
+df <- as_tibble(df)
+```
+
+
+```{r}
+#data structure
+str(df)
+```
+
+## Anomaly detection
+### Decomposing
+
+```{r}
+df %>%
+time_decompose(Sales, method = 'stl', frequency = 'auto', trend = 'auto') %>%
+anomalize(remainder, method = 'iqr', alpha = 0.1, max_anoms = 0.5) %>%
+plot_anomaly_decomposition(ncol = 2, alpha_dots = 0.6)
+```
+
+### Recomposing
+```{r}
+
+df %>%
+time_decompose(Sales, method = 'stl', frequency = 'auto', trend = 'auto') %>%
+anomalize(remainder, method = 'iqr', alpha = 0.1, max_anoms = 0.5) %>%
+time_recompose() %>%
+plot_anomalies(time_recomposed = TRUE, ncol = 2, alpha_dots = 0.6)
+```
+
+
+# Conclusion
+
+we can see that we have many anomalies in our data
+

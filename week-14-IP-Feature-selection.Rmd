@@ -1,0 +1,156 @@
+---
+title: "Untitled"
+author: "Francis Thairu"
+date: '2022-04-03'
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## R Markdown
+
+This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+
+When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+
+
+## Reading data
+
+```{r}
+df1=read.csv("http://bit.ly/CarreFourDataset")
+head(df1)
+```
+## Data cleaning
+### Checking for null values
+
+```{r}
+sum(is.na(df1))
+#there is no null values in our dataset
+```
+```{r}
+sum(duplicated(df1))
+#there are no duplicates in our data
+```
+
+## Feature Selection
+#### Getting numerical columns
+
+```{r}
+ numcols1= df1[c(6:8,12,14:16)]
+head(numcols1)
+```
+### Filter method
+
+```{r}
+library(caret)
+library(corrplot)
+```
+
+```{r}
+# Calculating the correlation matrix
+# ---
+#
+correlationMatrix <- cor(numcols1)
+
+```
+
+```{r}
+# Find attributes that are highly correlated
+# ---
+#
+highlyCorrelated <- findCorrelation(correlationMatrix, cutoff=0.75)
+
+# Highly correlated attributes
+# ---
+# 
+highlyCorrelated
+
+names(numcols1[,highlyCorrelated])
+# columns (cogs, total and tax) are the most highly correlated columns
+```
+
+```{r}
+# We can remove the variables with a higher correlation 
+# and comparing the results graphically as shown below
+# ---
+# 
+# Removing Redundant Features 
+# ---
+# 
+df_1<-numcols1[-highlyCorrelated]
+
+# Performing our graphical comparison
+# ---
+# 
+par(mfrow = c(1, 2))
+corrplot(correlationMatrix, order = "hclust")
+corrplot(cor(df_1), order = "hclust")
+```
+
+### Wrapper method
+
+```{r}
+library(clustvarsel)
+library(mclust)
+```
+
+```{r}
+# Sequential forward greedy search (default)
+#out = clustvarsel(numcols1,G = 1:2)
+#out
+# The selection algorithm would indicate that the subset 
+# we use for the clustering model is composed of variables X1 and X2 
+# and that other variables should be rejected. 
+# Having identified the variables that we use, we proceed to build the clustering model
+```
+
+```{r}
+#Subset1 = numcols1[,out$subset]
+#mod = Mclust(Subset1, G = 1:5)
+#summary(mod)
+```
+
+```{r}
+#plot(mod,c("classification"))
+```
+### Embedded method
+
+```{r}
+library(wskm)
+library(cluster)
+```
+
+```{r}
+set.seed(5)
+model <- ewkm(df1[c(6:8,12,14:16)], 3, lambda=2, maxiter=50)
+```
+
+```{r}
+clusplot(df1[c(6:8,12,14:16)], model$cluster, color=T, shade=F,
+         labels=2, lines=2,main='Cluster Analysis for Carrefour')
+```
+
+```{r}
+# Weights are calculated for each variable and cluster.
+# They are a measure of the relative importance of each variable 
+# with regards to the membership of the observations to that cluster. 
+# The weights are incorporated into the distance function, 
+# typically reducing the distance for more important variables.
+# Weights remain stored in the model and we can check them as follows:
+# 
+round(model$weights*100,2)
+```
+
+
+#Conclusion
+
+1. Columns (cogs, total and tax) are the most highly correlated columns.
+
+2. Important columns to use when clustering are unit price and Quantity according to wrapper method
+
+3. According to embedded method, gross income and tax play a huge role in our data.
+
+
+
