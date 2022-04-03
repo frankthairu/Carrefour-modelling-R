@@ -1,0 +1,119 @@
+---
+title: "Untitled"
+author: "Francis Thairu"
+date: '2022-04-03'
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## R Markdown
+
+This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+
+When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+
+```{r cars}
+summary(cars)
+```
+
+## Including Plots
+
+You can also embed plots, for example:
+
+```{r pressure, echo=FALSE}
+plot(pressure)
+```
+
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+
+```{r}
+library(arules)
+path_trans<-"http://bit.ly/SupermarketDatasetII"
+df<-read.transactions(path_trans,sep=',')
+df
+```
+
+```{r}
+# Verifying the object's class
+# ---
+# This should show us transactions as the type of data that we will need
+# ---
+# 
+class(df)
+```
+
+```{r}
+# Previewing our first 5 transactions
+#
+inspect(df[1:5])
+```
+
+```{r}
+# This would give us some information such as the most purchased items, 
+# distribution of the item sets (no. of items purchased in each transaction), etc.
+# ---
+# 
+summary(df)
+```
+```{r}
+# Exploring the frequency of some articles 
+# i.e. transacations ranging from 1 to 10 and performing 
+# some operation in percentage terms of the total transactions 
+itemFrequency(df[, 1:10],type = "absolute")
+round(itemFrequency(df[, 1:10],type = "relative")*100,2)
+```
+
+```{r}
+# Producing a chart of frequencies and fitering 
+# to consider only items with a minimum percentage 
+# of support/ considering a top x of items
+# ---
+# Displaying top 10 most common items in the transactions dataset 
+# and the items whose relative importance is at least 10%
+# 
+par(mfrow = c(1, 2))
+
+# plot the frequency of items
+itemFrequencyPlot(df, topN = 10,col="darkgreen")
+itemFrequencyPlot(df, support = 0.1,col="darkred")
+
+# we can see that mineral water was most common item
+```
+
+```{r}
+# Building a model based on association rules 
+# using the apriori function 
+# ---
+# We use Min Support as 0.001 and confidence as 0.8
+#this will work as the best parameters sicechanging them will lead to a big rise or drop in rules.
+# ---
+# 
+rules <- apriori (df, parameter = list(supp = 0.001, conf = 0.8))
+rules
+```
+```{r}
+# Observing rules built in our model i.e. first 5 model rules
+# ---
+# 
+inspect(rules[1:5])
+# Interpretation of the first rule:
+# ---
+# If someone buys frozen smoothie, spinach, there is a 88% chance he/she will also buy mineral water
+```
+
+```{r}
+# Ordering these rules by a criteria such as the level of confidence
+# then looking at the first five rules.
+# We can also use different criteria such as: (by = "lift" or by = "support")
+# 
+rules<-sort(rules, by="confidence", decreasing=TRUE)
+inspect(rules[1:5])
+
+# Interpretation
+# ---
+# The given top 4 rules have a confidence of 100
+```
+

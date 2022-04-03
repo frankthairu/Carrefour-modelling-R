@@ -1,0 +1,95 @@
+---
+title: "anomalies 2"
+author: "Francis Thairu"
+date: '2022-04-01'
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## R Markdown
+
+This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+
+When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+
+## Reading the data
+
+```{r}
+df =read.csv("http://bit.ly/CarreFourDataset")
+head(df)
+```
+##Data Cleaning
+
+```{r}
+# Checking null values
+colSums(is.na(df))
+#There is no null values in our dataset
+```
+
+```{r}
+sum(duplicated(df))
+#there are no duplicates in our data
+```
+
+
+## PCA
+
+```{r}
+numcols= df[c(6:8,12,14:16)]
+head(numcols)
+```
+```{r}
+# Apply PCA using prcomp function
+#The prcomp function takes in the data as input, and it is highly recommended to set the argument scale=TRUE. This standardize the input data so that it has zero mean and variance one before doing PCA
+# Need to scale / Normalize as
+# PCA depends on distance measure
+my_pca <- prcomp(numcols, scale = TRUE,
+                center = TRUE, retx = T)
+names(my_pca)
+#it has 5 variables
+```
+
+```{r}
+pc=princomp(numcols, cor = TRUE)
+names(pc)
+```
+
+```{r}
+# bar plot
+plot(pc)
+```
+
+```{r}
+library(dplyr)
+library(ggplot2)
+library(GGally)
+```
+
+```{r}
+library(devtools)
+```
+
+```{r}
+library(ggbiplot)
+```
+
+```{r}
+ggbiplot(my_pca)
+#From the graph we will see that the variables unit price, gross income and quantity contribute mostle to pc2 whereas rating contributes to pc 1
+#Adding more detail to the plot, we provide arguments rownames as labels.
+```
+
+```{r}
+ggbiplot(my_pca, labels=rownames(numcols), obs.scale = 1, var.scale = 1)
+```
+
+##Conclusion
+
+1. Pc1 contributes to majority of the variance in our data whereas Pc2 and Pc3 are almost equal.
+
+2. The variables unit price, gross income and quantity contribute mostle to pc2 whereas rating contributes to pc 1
+
+
