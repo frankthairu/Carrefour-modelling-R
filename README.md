@@ -49,7 +49,12 @@ Francis Thairu
 
 # Setup
 
+To view the codes and analysis one can easily follow the link below and it will lead you to a new web page where you can easily view
 
+* https://rpubs.com/frankthairu/885887
+* https://rpubs.com/frankthairu/885849
+* https://rpubs.com/frankthairu/885862
+* https://rpubs.com/frankthairu/885833
 
 # Contact
 
