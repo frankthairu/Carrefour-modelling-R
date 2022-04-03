@@ -2,6 +2,7 @@
 
 # Project Description
 We are a Data analyst company at Carrefour Kenya and are currently undertaking a project that will inform the marketing department on the most relevant marketing strategies that will result in the highest no. of sales (total price including tax). Your project has been divided into four parts where you'll explore a recent marketing dataset by performing various unsupervised learning techniques and later providing recommendations based on our insights.
+
 We will be performing the following unsupervised methods:
 
 * Dimensionality Reduction
@@ -20,21 +21,27 @@ This section will require that we create association rules that will allow you t
 
 We have also been requested to check whether there are any anomalies in the given sales dataset. The objective of this task being fraud detection.
 
-Dataset
+# Datasets
 
 The dataset files for different methods can be found below(respectively):
 
-Part 1 and 2: Dataset [Link (Links to an external site.)].
-Part 3: Dataset [Link (Links to an external site.)].
-Part 4: Dataset [Link (Links to an external site.)].
+* Part 1 and 2: Dataset [Link (Links to an external site.)].
+
+* Part 3: Dataset [Link (Links to an external site.)].
+
+* Part 4: Dataset [Link (Links to an external site.)].
 
 
 # Built by
 
-*R
-*R Studio
-*Github
-*Rpubs
+* R
+
+* R Studio
+
+* Github
+
+* Rpubs
+
 
 # Author
 
