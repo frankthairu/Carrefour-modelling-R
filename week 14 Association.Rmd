@@ -52,6 +52,15 @@ inspect(df[1:5])
 ```
 
 ```{r}
+summary(df)
+```
+
+```{r}
+itemFrequencyPlot(df, topN=10,  cex.names=1)
+```
+
+
+```{r}
 # This would give us some information such as the most purchased items, 
 # distribution of the item sets (no. of items purchased in each transaction), etc.
 # ---
@@ -104,6 +113,7 @@ inspect(rules[1:5])
 # If someone buys frozen smoothie, spinach, there is a 88% chance he/she will also buy mineral water
 ```
 
+
 ```{r}
 # Ordering these rules by a criteria such as the level of confidence
 # then looking at the first five rules.
@@ -115,5 +125,51 @@ inspect(rules[1:5])
 # Interpretation
 # ---
 # The given top 4 rules have a confidence of 100
+```
+```{r}
+library(arulesViz)
+```
+
+```{r}
+plot(rules)
+```
+The plot shows support on the x-axis and confidence on the y-axis. Lift ist shown as a color with different levels ranging from grey to red.
+
+We could also use only “confidence” as a specific measure of interest:
+
+
+```{r}
+plot(rules, measure = "confidence")
+```
+There is a special value for shading called “order” which produces a two-key plot where the color of the points represents the length (order) of the rule if you select method = "two-key plot. This is basically a scatterplot with shading = "order":
+
+```{r}
+plot(rules, method = "two-key plot")
+```
+# Interactive Scatter plot
+
+```{r}
+plot(rules, engine = "plotly")
+```
+
+4.8 Graph-based visualization
+Graph-based techniques concentrate on the relationship between individual items in the rule set. They represent the rules (or itemsets) as a graph with items as labeled vertices, and rules (or itemsets) represented as vertices connected to items using arrows.
+
+For rules, the LHS items are connected with arrows pointing to the vertex representing the rule and the RHS has an arrow pointing to the item.
+
+Several engines are available. The default engine uses igraph (plot.igraph and tkplot for the interactive visualization). … arguments are passed on to the respective plotting function (use for color, etc.).
+
+The network graph below shows associations between selected items. Larger circles imply higher support, while red circles imply higher lift. Graphs only work well with very few rules, why we only use a subset of 10 rules from our data:
+
+```{r}
+subrules <- head(rules, n = 10, by = "confidence")
+
+plot(subrules, method = "graph",  engine = "htmlwidget")
+
+```
+#Paralel coordinate plot
+
+```{r}
+plot(subrules, method="paracoord")
 ```
 
