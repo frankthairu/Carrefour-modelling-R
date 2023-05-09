@@ -1,7 +1,7 @@
-# Week-14-IP
+# Carrefour Dataset modelling-R
 
 # Project Description
-We are a Data analyst company at Carrefour Kenya and are currently undertaking a project that will inform the marketing department on the most relevant marketing strategies that will result in the highest no. of sales (total price including tax). Your project has been divided into four parts where you'll explore a recent marketing dataset by performing various unsupervised learning techniques and later providing recommendations based on our insights.
+We are a Data analyst company at Carrefour Kenya and are currently undertaking a project that will inform the marketing department on the most relevant marketing strategies that will result in the highest no. of sales (total price including tax). 
 
 We will be performing the following unsupervised methods:
 
